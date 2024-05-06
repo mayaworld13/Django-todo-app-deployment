@@ -1,59 +1,92 @@
 {% extends 'todos/base.html' %}
 
 {% block title %}
-<title>Todo list</title>
+<title>Mayank Todo App</title>
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<style>
+  /* Custom CSS for Mayank Todo App */
+  .list-group-item {
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+  }
 
-  <!-- title row -->
-  <div class="row">
-    <div class="offset-md-2 col-lg-9">
-      <div class="page-header">
-        <h1>
-          Todo List
-        </h1>
-      </div>
+  .list-group-item:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .todo-complete {
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+
+  .todo-status-checkbox {
+    margin-right: 10px;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: background-color 0.3s;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+
+  .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    transition: background-color 0.3s;
+  }
+
+  .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
+</style>
+
+<div class="container">
+  <!-- Title row -->
+  <div class="row mt-4">
+    <div class="col-md-12 text-center">
+      <h1>Mayank Todo App</h1>
     </div>
   </div>
 
   <!-- Add a todo row -->
-  <div class="row">
-    <div class="offset-md-2 col-lg-9">
+  <div class="row mt-4">
+    <div class="col-md-6 offset-md-3">
       <form method="post" action="{% url 'todos:add' %}">
         {% csrf_token %}
-        <div class="form-row">
-          <div class="col-md-6">
-            <input type="text" class="form-control" name="title" placeholder="Do laundry" required>
-          </div>
-          <div class="col-md-6">
-            <button type="submit" name="submit" class="btn btn-outline-primary">
-              Add
-            </button>
+        <div class="input-group">
+          <input type="text" class="form-control" name="title" placeholder="Enter a new todo item" required>
+          <div class="input-group-append">
+            <button type="submit" name="submit" class="btn btn-primary">Add</button>
           </div>
         </div>
       </form>
     </div>
   </div>
-  <hr />
+  <hr>
 
-  <!-- todo list row -->
-  <div class="row">
-    <div class="offset-md-2 col-lg-6">
+  <!-- Todo list row -->
+  <div class="row mt-4">
+    <div class="col-md-6 offset-md-3">
       <div class="list-group">
         {% for todo in todo_list %}
-        <div class="list-group-item {% if todo.isCompleted %} todo-complete {% endif %}">
+        <div class="list-group-item d-flex justify-content-between align-items-center {% if todo.isCompleted %}todo-complete{% endif %}">
           <form style="display: inline;" method="post" action="{% url 'todos:update' todo.id %}">
             {% csrf_token %}
-            <input type="checkbox" name="isCompleted" onchange="this.form.submit()" {% if todo.isCompleted %} checked
-              {% endif %} class="todo-status-checkbox"
-              title="{% if not todo.isCompleted %} mark as done {% else %} mark undone {% endif %}">
+            <input type="checkbox" name="isCompleted" onchange="this.form.submit()" {% if todo.isCompleted %}checked{% endif %}
+              class="todo-status-checkbox" title="{% if not todo.isCompleted %}Mark as done{% else %}Mark undone{% endif %}">
           </form>
-          {{ todo.title }}
-          <a href="{% url 'todos:delete' todo.id %}" title="Delete">
-            <i class="far fa-trash-alt"></i>
-          </a>
+          <span>{{ todo.title }}</span>
+          <a href="{% url 'todos:delete' todo.id %}" title="Delete" class="text-danger"><i class="far fa-trash-alt"></i></a>
         </div>
         {% endfor %}
       </div>
@@ -62,3 +95,4 @@
 </div>
 
 {% endblock %}
+
