@@ -36,4 +36,58 @@ $ python manage.py runserver
 
 Once the server is hosted, head over to http://127.0.0.1:8000/todos for the App.
 
+# Django Todo App  Docker Setup
+
+## Prerequisites
+
+Before you begin, make sure you have the following installed:
+
+- Docker
+- Git (optional, for cloning the repository)
+
+## Setup
+
+1. Clone this repository (if you haven't already):
+
+   ```bash
+   git clone https://github.com/mayaworld13/Django-todo-app-deployment.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd Django-todo-app-deployment
+   ```
+3. create python file for allowed host file so that the current IP of ec2 is updated and it fetch the details.
+
+4. create a docker image from Dockerfile for todo App
+   ```bash
+   docker build -t  django-todo-app .
+   ```
+   
+5. Run the container in Detach mode 
+   ```bash
+   docker run -d -p 8000:8000 django-todo-app
+   ```
+   
+6. Test it ( make sure to add the port 8000 in security bound rules for ec2 instance)
+   ```bash
+   YOURIP:8000
+   ```
+   
+7. Tag the containter in order to push it in Dockerhub
+   ```bash
+   docker tag django-todo-app mayaworld13/django-todo-app
+   ```
+
+8. Add the credential of Dockerhub ( add secrets)
+   ```bash
+   docker login
+   ```
+   
+9. push Docker image in  Dockerhub
+   ```bash
+   docker push mayaworld13/django-todo-app
+   ```
+   
 Cheers and Happy Coding :)
