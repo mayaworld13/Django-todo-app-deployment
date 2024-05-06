@@ -1,4 +1,3 @@
-# Use the official Python image as the base image
 FROM python:3.9
 
 # Set environment variables
@@ -13,6 +12,12 @@ COPY . /app/
 
 # Install Django
 RUN pip install django
+
+# Copy the script to update ALLOWED_HOSTS
+COPY update_allowed_hosts.py /app/
+
+# Run the script to update ALLOWED_HOSTS
+RUN python update_allowed_hosts.py
 
 # Run migrations
 RUN python manage.py makemigrations
