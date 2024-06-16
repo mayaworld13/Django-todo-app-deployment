@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Application Deployment using Terraform</title>
+    <style>
+      body {
+        background-color: #2E8B57;
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #fff;
+      }
+      .navbar {
+        background-color: #fff;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 60px;
+        padding: 0 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      .navbar button {
+        border: none;
+        background-color: transparent;
+        color: #FF8C00;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        outline: none;
+        padding: 10px 20px;
+        margin: 0 5px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+      .navbar button:hover {
+        background-color: #2E8B57;
+        color: #fff;
+        transform: scale(1.1);
+      }
+      .navbar button::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        border-radius: 20px;
+        background: rgba(255, 140, 0, 0.3);
+        z-index: -1;
+        transition: transform 0.3s ease;
+      }
+      .navbar button:hover::after {
+        transform: scale(1.2);
+      }
+      h1 {
+        text-align: center;
+        margin-top: 80px;
+        font-size: 2.5em;
+        font-weight: bold;
+      }
+      p {
+        text-align: center;
+        font-size: 1.2em;
+        margin: 20px 10px;
+      }
+      @media (max-width: 768px) {
+        .navbar {
+          flex-direction: column;
+          height: auto;
+          padding: 10px;
+        }
+        .navbar button {
+          margin: 5px 0;
+        }
+        h1 {
+          font-size: 2em;
+        }
+        p {
+          font-size: 1em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <button>Home</button>
+      <button>Services</button>
+      <button>About Us</button>
+      <button>DevOps Courses</button>
+    </div>
+    <h1>WEB APPLICATION DEPLOYMENT USING LOADBALANCER BY MAYANK SHARMA</h1>
+    <p>This is running in private subnet in region 1b using Terraform</p>
+  </body>
+</html>
