@@ -69,20 +69,21 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             sudo apt update -y
-            sudo apt install -y python3-pip python3-venv unzip
+            sudo apt install -y python3 python3-venv python3-pip unzip
 
             rm -rf ~/todoapp || true
             mkdir ~/todoapp
             unzip ~/todoapp.zip -d ~/todoapp
 
             cd ~/todoapp
-            python3 -m venv venv
+            python3 -m venv venv   # Use whatever system python3 is available
             source venv/bin/activate
+            pip install --upgrade pip setuptools wheel
             pip install django gunicorn
 
             # Run migrations
             python manage.py migrate
 
-            # Restart app
+            # Restart app safely
             pkill gunicorn || true
-            nohup venv/bin/gunicorn todoApp.wsgi:application --bind 0.0.0.0:8000 &
+            nohup ./venv/bin/gunicorn todoApp.wsgi:application --bind 0.0.0.0:8000 --workers 3 &
