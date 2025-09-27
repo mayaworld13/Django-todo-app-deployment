@@ -1,9 +1,9 @@
-name: Django CI/CD without Docker 🚀
+name: Django CI/CD without Docker 
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
