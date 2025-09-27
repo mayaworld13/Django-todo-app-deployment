@@ -1,0 +1,88 @@
+name: Django CI/CD without Docker 🚀
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build & Package Django App
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Django & Gunicorn
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install django gunicorn
+
+      - name: Collect static files
+        run: |
+          source venv/bin/activate
+          python manage.py collectstatic --noinput
+
+      - name: Package project
+        run: |
+          zip -r todoapp.zip . -x "*.git*"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: todoapp
+          path: todoapp.zip
+
+  deploy:
+    name: Deploy to EC2
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: todoapp
+          path: .
+
+      - name: Copy Artifact to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "todoapp.zip"
+          target: "~/"
+
+      - name: SSH into EC2 & Deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo apt update -y
+            sudo apt install -y python3-pip python3-venv unzip
+
+            rm -rf ~/todoapp || true
+            mkdir ~/todoapp
+            unzip ~/todoapp.zip -d ~/todoapp
+
+            cd ~/todoapp
+            python3 -m venv venv
+            source venv/bin/activate
+            pip install django gunicorn
+
+            # Run migrations
+            python manage.py migrate
+
+            # Restart app
+            pkill gunicorn || true
+            nohup venv/bin/gunicorn todoApp.wsgi:application --bind 0.0.0.0:8000 &
