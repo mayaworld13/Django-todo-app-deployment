@@ -1,4 +1,4 @@
-name: Django CI/CD without Docker 
+name: Django CI/CD without Docker 🚀
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
           zip -r todoapp.zip . -x "*.git*"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: todoapp
           path: todoapp.zip
@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: Download Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: todoapp
           path: .
